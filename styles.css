@@ -29,5 +29,22 @@ body {
     transition: background-color 0.3s, color 0.3s;
     padding: 20px;
 }
-
+.header-oneline{
+ display: inline-block;
+}
+.theme-toggle{
+	float: right;
+}
+table{
+	width:70%;
+	border: 1px solid black;
+}
+th,td{
+	height: 100px;
+	border: 1px solid black;
+	padding: 5px;
+}
+.estimated-1rm{
+	font-weight: bold;
+}
 /*body*/
