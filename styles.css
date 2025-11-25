@@ -19,7 +19,6 @@
     --text-color: #e0e0e0;
     --border-color: #444444;
     --header-bg: #3a70b2;
-    --shadow: rgba(0, 0, 0, 0.3);
 }
 
 body {
@@ -28,6 +27,11 @@ body {
     color: var(--text-color);
     transition: background-color 0.3s, color 0.3s;
     padding: 20px;
+}
+button{
+	background-color: transparent;
+	border: none;
+	font-size: 1.5rem;
 }
 .header-oneline{
  display: inline-block;
@@ -46,5 +50,8 @@ th,td{
 }
 .estimated-1rm{
 	font-weight: bold;
+}
+.logo{
+	font-size:2rem;
 }
 /*body*/
