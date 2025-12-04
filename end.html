@@ -1,0 +1,46 @@
+</tbody>
+            </table>
+
+            <section class="formulas-section">
+                <h2>Used Formulas</h2>
+                
+                <div class="formula">
+                    <div class="formula-name">1. Epley Formula</div>
+                    <div class="formula-text">1RM = Weight × (1 + 0.0333 × Reps)</div>
+                </div>
+
+                <div class="formula">
+                    <div class="formula-name">2. Brzycki Formula</div>
+                    <div class="formula-text">1RM = Weight × (36 / (37 - Reps))</div>
+                </div>
+
+                <p class="note">
+                    * Final result is calculated as the average of both formulas for improved accuracy.
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <div class="credits">
+                <strong>Created by:</strong> Edgar Dainorovič & Andrius Survila<br>
+                <span>Vilnius University | MIF</span>
+            </div>
+        </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                button.textContent = '🌙';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️';
+            }
+        }
+    </script>
+</body>
+</html>
