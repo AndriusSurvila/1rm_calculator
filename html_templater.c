@@ -2,40 +2,40 @@
 #include <string.h>
 #include <stdio.h>
 
-int copy_template_to_html(const char *template_filename, const char *output_filename)
+void replace_in_file(FILE *file, const char *key, list_node *replacements)
+{
+while (replacements != NULL)
+{
+    if (strcmp(replacements->key, key) == 0)
+    {
+	fputs(replacements->value, file);
+	return;
+    }
+    replacements = replacements->next;
+}
+fputs(key, file); // not found
+}
+int copy_template_to_html(const char *template_filename, FILE *output_file)
 {
 	FILE *template_fp = fopen(template_filename, "r");
 	if (template_fp == NULL)
 	{
-		return -1;
-	}
-	FILE *output_fp = fopen(output_filename, "a");
-	if (output_fp == NULL)
-	{
-		fclose(template_fp);
 		return -1;
 	}
 	char read_char;
 	while ((read_char = getc(template_fp)) != EOF)
 	{
-		fputc(read_char, output_fp);
+		fputc(read_char, output_file);
 	}
 	fclose(template_fp);
-	fclose(output_fp);
 	return 0;
 }
 
-int write_rm_to_html(const char *template_filename, const char *output_filename, rm_data *replacements)
+int write_rm_to_html(const char *template_filename, FILE *output_file, list_node *replacements)
 {
 	FILE *template_fp = fopen(template_filename, "r");
 	if (template_fp == NULL)
 	{
-		return -1;
-	}
-	FILE *output_fp = fopen(output_filename, "a");
-	if (output_fp == NULL)
-	{
-		fclose(template_fp);
 		return -1;
 	}
 	char read_char;
@@ -54,29 +54,14 @@ int write_rm_to_html(const char *template_filename, const char *output_filename,
 				}
 				buffer[i] = read_char;
 			}
-			if (strcmp(buffer, "name") == 0)
-			{
-				fprintf(output_fp, "%s", replacements->name);
-			}
-			else if (strcmp(buffer, "weight") == 0)
-			{
-				fprintf(output_fp, "%d", replacements->weight);
-			}
-			else if (strcmp(buffer, "reps") == 0)
-			{
-				fprintf(output_fp, "%d", replacements->reps);
-			}
-			else if (strcmp(buffer, "rm") == 0)
-			{
-				fprintf(output_fp, "%.2f", replacements->rm);
-			}
+			replace_in_file(output_file, buffer, replacements);	
+
 		}
 		else
 		{
-			fputc(read_char, output_fp);
+			fputc(read_char, output_file);
 		}
 	}
 	fclose(template_fp);
-	fclose(output_fp);
 	return 0;
 }
