@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1RM Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+	<header>
+            <div>
+                <h1>💪 1RM Calculator</h1>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+                🌙
+            </button>
+        </header>
+
+        <main>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Weight (kg)</th>
+                        <th>Repetitions</th>
+                        <th>Estimated 1RM</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+<tr>
+	<td>dumbell incline press</td>
+	<td>45</td>
+	<td>4</td>
+	<td class="estimated-1rm">50 kg</td>
+</tr>
+
+<tr>
+	<td>lat pulldowns</td>
+	<td>98</td>
+	<td>6</td>
+	<td class="estimated-1rm">115 kg</td>
+</tr>
+
+</tbody>
+            </table>
+
+            <section class="formulas-section">
+                <h2>Used Formulas</h2>
+                
+                <div class="formula">
+                    <div class="formula-name">1. Epley Formula</div>
+                    <div class="formula-text">1RM = Weight × (1 + 0.0333 × Reps)</div>
+                </div>
+
+                <div class="formula">
+                    <div class="formula-name">2. Brzycki Formula</div>
+                    <div class="formula-text">1RM = Weight × (36 / (37 - Reps))</div>
+                </div>
+
+                <p class="note">
+                    * Final result is calculated as the average of both formulas for improved accuracy.
+                </p>
+            </section>
+        </main>
+
+        <footer>
+            <div class="credits">
+                <strong>Created by:</strong> Edgar Dainorovič & Andrius Survila<br>
+                <span>Vilnius University | MIF</span>
+            </div>
+        </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const button = document.querySelector('.theme-toggle');
+            const currentTheme = html.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                button.textContent = '🌙';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                button.textContent = '☀️';
+            }
+        }
+    </script>
+</body>
+</html>
