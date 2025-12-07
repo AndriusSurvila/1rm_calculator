@@ -17,6 +17,10 @@ double calculate_brzycki(double weight, int reps)
 
 double calculate_1rm(double weight, int reps)
 {
+    if (reps == 1) {
+        return weight;
+    }
+    
     double epley = calculate_epley(weight, reps);
     double brzycki = calculate_brzycki(weight, reps);
     return (epley + brzycki) / 2.0;
@@ -42,6 +46,7 @@ void int_to_string(int value, char *buffer)
 
 list_node* create_exercise_chain(char *name, double weight, int reps, double one_rm, char *name_buf, char *weight_buf, char *reps_buf, char *rm_buf)
 {
+    // Allocate nodes
     list_node *node1 = (list_node*)malloc(sizeof(list_node));
     list_node *node2 = (list_node*)malloc(sizeof(list_node));
     list_node *node3 = (list_node*)malloc(sizeof(list_node));
