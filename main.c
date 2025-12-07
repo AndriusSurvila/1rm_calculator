@@ -89,7 +89,7 @@ int main()
         return 1;
     }
     
-    if (copy_template_to_html("start.html", output_file) != 0) {
+    if (copy_template_to_html("templates/start.html", output_file) != 0) {
         printf("Error: Could not read start.html template!\n");
         fclose(output_file);
         for (int i = 0; i < count; i++) {
@@ -99,7 +99,7 @@ int main()
     }
     
     for (int i = 0; i < count; i++) {
-        if (write_to_html("row_template.html", output_file, exercises[i]) != 0) {
+        if (write_to_html("templates/row_template.html", output_file, exercises[i]) != 0) {
             printf("Error: Could not write exercise row!\n");
             fclose(output_file);
             for (int j = 0; j < count; j++) {
@@ -109,7 +109,7 @@ int main()
         }
     }
     
-    if (copy_template_to_html("end.html", output_file) != 0) {
+    if (copy_template_to_html("templates/end.html", output_file) != 0) {
         printf("Error: Could not read end.html template!\n");
         fclose(output_file);
         for (int i = 0; i < count; i++) {
