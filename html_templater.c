@@ -31,7 +31,7 @@ int copy_template_to_html(const char *template_filename, FILE *output_file)
 	return 0;
 }
 
-int write_rm_to_html(const char *template_filename, FILE *output_file, list_node *replacements)
+int write_to_html(const char *template_filename, FILE *output_file, list_node *replacements)
 {
 	FILE *template_fp = fopen(template_filename, "r");
 	if (template_fp == NULL)

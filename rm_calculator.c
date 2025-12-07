@@ -1,6 +1,7 @@
 #include "rm_calculator.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 double calculate_epley(double weight, int reps)
 {
@@ -39,59 +40,46 @@ void int_to_string(int value, char *buffer)
     sprintf(buffer, "%d", value);
 }
 
-int read_exercise(Exercise *exercise)
+list_node* create_exercise_chain(char *name, double weight, int reps, double one_rm, char *name_buf, char *weight_buf, char *reps_buf, char *rm_buf)
 {
-    printf("Enter exercise name (or 'done' to finish): ");
-    if (fgets(exercise->name, sizeof(exercise->name), stdin) == NULL) {
-        return -1;
+    list_node *node1 = (list_node*)malloc(sizeof(list_node));
+    list_node *node2 = (list_node*)malloc(sizeof(list_node));
+    list_node *node3 = (list_node*)malloc(sizeof(list_node));
+    list_node *node4 = (list_node*)malloc(sizeof(list_node));
+    
+    if (!node1 || !node2 || !node3 || !node4) {
+        return NULL;
     }
     
-    size_t len = strlen(exercise->name);
-    if (len > 0 && exercise->name[len - 1] == '\n') {
-        exercise->name[len - 1] = '\0';
-    }
+    strcpy(name_buf, name);
+    double_to_string(weight, weight_buf, 0);
+    int_to_string(reps, reps_buf);
+    double_to_string(one_rm, rm_buf, 0);
     
-    if (strcmp(exercise->name, "done") == 0) {
-        return 0;
-    }
+    node1->key = "name";
+    node1->value = name_buf;
+    node1->next = node2;
     
-    printf("Enter weight (kg): ");
-    if (scanf("%lf", &exercise->weight) != 1) {
-        return -1;
-    }
+    node2->key = "weight";
+    node2->value = weight_buf;
+    node2->next = node3;
     
-    printf("Enter repetitions: ");
-    if (scanf("%d", &exercise->reps) != 1) {
-        return -1;
-    }
+    node3->key = "reps";
+    node3->value = reps_buf;
+    node3->next = node4;
     
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    node4->key = "rm";
+    node4->value = rm_buf;
+    node4->next = NULL;
     
-    exercise->one_rm = calculate_1rm(exercise->weight, exercise->reps);
-    
-    return 1;
+    return node1;
 }
 
-int read_exercises(Exercise exercises[], int max_count)
+void free_chain(list_node *head)
 {
-    int count = 0;
-    
-    printf("\n=== 1RM Calculator - Enter Exercise Data ===\n\n");
-    
-    while (count < max_count) {
-        int result = read_exercise(&exercises[count]);
-        
-        if (result == -1) {
-            printf("Error reading input!\n");
-            return -1;
-        } else if (result == 0) {
-            break;
-        }
-        
-        count++;
-        printf("\n");
+    while (head != NULL) {
+        list_node *temp = head;
+        head = head->next;
+        free(temp);
     }
-    
-    return count;
 }

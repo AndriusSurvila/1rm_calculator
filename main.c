@@ -6,108 +6,125 @@
 
 #define MAX_EXERCISES 20
 
-list_node* create_exercise_nodes(Exercise *exercise, char *name_buf, char *weight_buf, char *reps_buf, char *rm_buf)
-{
-    list_node *node1 = (list_node*)malloc(sizeof(list_node));
-    list_node *node2 = (list_node*)malloc(sizeof(list_node));
-    list_node *node3 = (list_node*)malloc(sizeof(list_node));
-    list_node *node4 = (list_node*)malloc(sizeof(list_node));
-    
-    if (!node1 || !node2 || !node3 || !node4) {
-        return NULL;
-    }
-    
-    strcpy(name_buf, exercise->name);
-    double_to_string(exercise->weight, weight_buf, 0);
-    int_to_string(exercise->reps, reps_buf);
-    double_to_string(exercise->one_rm, rm_buf, 0);
-    
-    node1->key = "name";
-    node1->value = name_buf;
-    node1->next = node2;
-    
-    node2->key = "weight";
-    node2->value = weight_buf;
-    node2->next = node3;
-    
-    node3->key = "reps";
-    node3->value = reps_buf;
-    node3->next = node4;
-    
-    node4->key = "rm";
-    node4->value = rm_buf;
-    node4->next = NULL;
-    
-    return node1;
-}
-
-void free_nodes(list_node *head)
-{
-    while (head != NULL) {
-        list_node *temp = head;
-        head = head->next;
-        free(temp);
-    }
-}
-
 int main()
 {
-    Exercise exercises[MAX_EXERCISES];
-    int count;
+    list_node *exercises[MAX_EXERCISES];
+    int count = 0;
     
-    count = read_exercises(exercises, MAX_EXERCISES);
+    char name_buffers[MAX_EXERCISES][50];
+    char weight_buffers[MAX_EXERCISES][20];
+    char reps_buffers[MAX_EXERCISES][20];
+    char rm_buffers[MAX_EXERCISES][20];
+        
+    while (count < MAX_EXERCISES) {
+        char input_name[50];
+        double input_weight;
+        int input_reps;
+        
+        printf("Enter exercise name (or 'done' to finish): ");
+        if (fgets(input_name, sizeof(input_name), stdin) == NULL) {
+            printf("Error reading input!\n");
+            break;
+        }
+        
+        size_t len = strlen(input_name);
+        if (len > 0 && input_name[len - 1] == '\n') {
+            input_name[len - 1] = '\0';
+        }
+        
+        if (strcmp(input_name, "done") == 0) {
+            break;
+        }
+        
+        printf("Enter weight (kg): ");
+        if (scanf("%lf", &input_weight) != 1) {
+            printf("Error reading weight!\n");
+            break;
+        }
+        
+        printf("Enter repetitions: ");
+        if (scanf("%d", &input_reps) != 1) {
+            printf("Error reading repetitions!\n");
+            break;
+        }
+        
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+        
+        double one_rm = calculate_1rm(input_weight, input_reps);
+        
+        exercises[count] = create_exercise_chain(
+            input_name, 
+            input_weight, 
+            input_reps, 
+            one_rm,
+            name_buffers[count],
+            weight_buffers[count],
+            reps_buffers[count],
+            rm_buffers[count]
+        );
+        
+        if (exercises[count] == NULL) {
+            printf("Error: Memory allocation failed!\n");
+            break;
+        }
+        
+        count++;
+        printf("\n");
+    }
     
-    if (count <= 0) {
-        printf("Error\n");
+    if (count == 0) {
+        printf("No exercises entered.\n");
         return 1;
     }
     
+    printf("\n=== Generating HTML Report ===\n");
+    
     FILE *output_file = fopen("output.html", "w");
     if (output_file == NULL) {
-        printf("Error: could not create output file\n");
+        printf("Error: Could not create output file!\n");
+        for (int i = 0; i < count; i++) {
+            free_chain(exercises[i]);
+        }
         return 1;
     }
     
     if (copy_template_to_html("start.html", output_file) != 0) {
-        printf("Error: could not read start.html template\n");
+        printf("Error: Could not read start.html template!\n");
         fclose(output_file);
+        for (int i = 0; i < count; i++) {
+            free_chain(exercises[i]);
+        }
         return 1;
     }
     
     for (int i = 0; i < count; i++) {
-        char name_buf[50];
-        char weight_buf[20];
-        char reps_buf[20];
-        char rm_buf[20];
-        
-        list_node *nodes = create_exercise_nodes(&exercises[i], name_buf, 
-                                                   weight_buf, reps_buf, rm_buf);
-        
-        if (nodes == NULL) {
-            printf("Error: memory allocation failed\n");
+        if (write_to_html("row_template.html", output_file, exercises[i]) != 0) {
+            printf("Error: Could not write exercise row!\n");
             fclose(output_file);
+            for (int j = 0; j < count; j++) {
+                free_chain(exercises[j]);
+            }
             return 1;
         }
-        
-        if (write_rm_to_html("row_template.html", output_file, nodes) != 0) {
-            printf("Error: could not write exercise row\n");
-            free_nodes(nodes);
-            fclose(output_file);
-            return 1;
-        }
-        
-        free_nodes(nodes);
     }
     
     if (copy_template_to_html("end.html", output_file) != 0) {
-        printf("Error: could not read end.html template\n");
+        printf("Error: Could not read end.html template!\n");
         fclose(output_file);
+        for (int i = 0; i < count; i++) {
+            free_chain(exercises[i]);
+        }
         return 1;
     }
     
     fclose(output_file);
     
-    printf("\nOK. HTML report generated: output.html\n");
+    for (int i = 0; i < count; i++) {
+        free_chain(exercises[i]);
+    }
+    
+    printf("\nSuccess! HTML report generated: output.html\n");
     printf("Total exercises processed: %d\n", count);
     
     return 0;
