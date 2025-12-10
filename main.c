@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "html_templater.h"
-#include "rm_calculator.h"
+#include "modules/html_templater.h"
+#include "modules/rm_calculator.h"
 
 #define INITIAL_CAPACITY 10
 
