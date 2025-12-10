@@ -1,0 +1,26 @@
+# Generated HTML output
+output.html
+
+# Compiled executables
+1rm_calculator
+1rm_calculator.exe
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Visual Studio Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*~
