@@ -26,7 +26,6 @@ The **1RM Calculator** is a tool designed for athletes and fitness enthusiasts t
 - **Unlimited exercises** - Add as many exercises as you need
 - **Dual formula calculation** - Uses both Epley and Brzycki formulas for accuracy
 - **Beautiful HTML output** - Generates a styled report with light/dark theme toggle
-- **Input validation** - Prevents invalid data entry
 - **Fast and lightweight** - Pure C implementation
 - **Reusable modules** - Modular design for easy maintenance
 
@@ -35,18 +34,23 @@ The **1RM Calculator** is a tool designed for athletes and fitness enthusiasts t
 ### Prerequisites
 
 - GCC compiler (or any C compiler)
+- Git (for cloning the repository)
 - Basic command line knowledge
 
 ### Compilation
 
 **On Windows:**
 ```bash
-gcc -o 1rm_calculator.exe main.c rm_calculator.c html_templater.c
+git clone https://github.com/AndriusSurvila/1rm_calculator.git 
+cd 1rm_calculator
+gcc -o 1rm_calculator.exe main.c modules/rm_calculator.c modules/html_templater.c
 ```
 
 **On Linux/macOS:**
 ```bash
-gcc -o 1rm_calculator main.c rm_calculator.c html_templater.c -lm
+git clone https://github.com/AndriusSurvila/1rm_calculator.git 
+cd 1rm_calculator
+gcc -o 1rm_calculator main.c modules/rm_calculator.c modules/html_templater.c -lm
 ```
 
 ## Usage
@@ -118,17 +122,16 @@ The application uses two scientifically validated formulas:
 ```
 1rm_calculator/
 ├── main.c                      # Main application logic
-├── rm_calculator.c             # 1RM calculation module
-├── rm_calculator.h             # Calculator header
-├── html_templater.c            # HTML generation module
-├── html_templater.h            # Templater header
+├── modules/                    # Module directory
+│   ├── html_templater.c        # HTML templating module
+│   ├── html_templater.h        # HTML templating module header
+│   ├── rm_calculator.c         # 1RM calculation module
+│   └── rm_calculator.h         # 1RM calculation module header
 ├── styles.css                  # CSS styles for output
 ├── templates/
 │   ├── start.html             # HTML header template
 │   ├── row_template.html      # Exercise row template
-│   ├── end.html               # HTML footer template
-│   └── index.html             # Example output
-├── .gitignore                  # Git ignore rules
+│   └── end.html               # HTML footer template
 └── README.md                   # This file
 ```
 
@@ -148,27 +151,6 @@ Provides template-based HTML generation:
 - Variable substitution using `{key}` syntax
 - Linked list for key-value replacements
 - Reusable for other template-based projects
-
-## Input Validation
-
-The application validates all user input:
-
-**Exercise Name:**
-- Cannot be empty or contain only whitespace
-
-**Weight:**
-- Must be positive (> 0)
-- Warning displayed for unusually high values (> 1000 kg)
-
-**Repetitions:**
-- Must be positive (> 0)
-- Must be less than 37 (formula limitation)
-- Warning displayed for high rep counts (> 20)
-
-**Error Handling:**
-- Invalid input types (letters instead of numbers) are rejected
-- Clear error messages guide the user
-- Input buffer is properly cleared after errors
 
 ## Team
 
